@@ -24,6 +24,14 @@
     </nav>
 
     <div class="content" style="padding: 20px;">
+        {% if messages %}
+<ul style="color: green;">
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
         {% block content %}
         {% endblock %}
     </div>
