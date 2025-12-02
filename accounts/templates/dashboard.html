@@ -35,6 +35,34 @@
             <h3>{{ low_stock_count }}</h3>
             <p>Low Stock Items</p>
         </div>
+        <div class="dashboard-container">
+
+    <h2>Dashboard</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Products</h3>
+            <p>{{ product_count }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Purchases</h3>
+            <p>{{ purchase_count }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Sales</h3>
+            <p>{{ sale_count }}</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'add_product' %}" class="btn-primary">Add Product</a>
+        <a href="{% url 'add_purchase' %}" class="btn-primary">Add Purchase</a>
+        <a href="{% url 'add_sale' %}" class="btn-primary">Add Sale</a>
+    </div>
+
+</div>
 
     </div>
 

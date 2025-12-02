@@ -49,17 +49,28 @@ def logout_view(request):
 
 
 
+
+
 def dashboard(request):
     total_products = Product.objects.count()
     total_purchases = Purchase.objects.count()
     total_sales = Sale.objects.count()
-    low_stock_count = Product.objects.filter(quantity__lt=5).count()
 
     context = {
         "total_products": total_products,
         "total_purchases": total_purchases,
         "total_sales": total_sales,
-        "low_stock_count": low_stock_count,
+    }
+
+    return render(request, "accounts/dashboard.html", context)
+
+def dashboard(request):
+    context = {
+        "product_count": Product.objects.count(),
+        "purchase_count": Purchase.objects.count(),
+        "sale_count": Sale.objects.count(),
     }
     return render(request, "dashboard.html", context)
+
+
 

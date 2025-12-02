@@ -1,0 +1,28 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="container">
+    <h2>Purchases</h2>
+
+    <a href="{% url 'add_purchase' %}" class="btn-primary">+ Add Purchase</a>
+
+    <table class="table">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price/Unit</th>
+            <th>Total</th>
+            <th>Date</th>
+        </tr>
+
+        {% for p in purchases %}
+        <tr>
+            <td>{{ p.product.name }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.price_per_unit }}</td>
+            <td>{{ p.total_price }}</td>
+            <td>{{ p.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

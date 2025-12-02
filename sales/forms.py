@@ -1,9 +1,9 @@
 from django import forms
-from .models import Purchase
+from .models import Sale
 
-class PurchaseForm(forms.ModelForm):
+class SaleForm(forms.ModelForm):
     class Meta:
-        model = Purchase
+        model = Sale
         fields = ["product", "quantity", "price_per_unit"]
         widgets = {
             "product": forms.Select(attrs={"class": "form-control"}),

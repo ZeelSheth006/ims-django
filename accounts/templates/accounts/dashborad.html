@@ -1,0 +1,57 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="dashboard-container">
+
+    <h2>📊 Dashboard</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>{{ total_products }}</h3>
+            <p>Total Products</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_purchases }}</h3>
+            <p>Total Purchases</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_sales }}</h3>
+            <p>Total Sales</p>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+.dashboard-container {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 25px;
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.stat-card h3 {
+    font-size: 40px;
+    margin: 0;
+    color: #007bff;
+}
+</style>
