@@ -1,15 +1,14 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% extends "base.html" %}
+{% block title %}Add Purchase{% endblock %}
 
-<div class="form-container">
+{% block content %}
+<h2>Add Purchase</h2>
 
-    <h2>Add Purchase</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Purchase</button>
+</form>
 
-        <button class="btn-primary">Add Purchase</button>
-    </form>
-
-</div>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .forms import SignupForm
 from django.shortcuts import render
 from inventory.models import Product
@@ -51,26 +52,59 @@ def logout_view(request):
 
 
 
+
+
+
+@login_required
 def dashboard(request):
+    # --- KPI Metrics ---
     total_products = Product.objects.count()
-    total_purchases = Purchase.objects.count()
-    total_sales = Sale.objects.count()
+    total_stock_quantity = (
+        Product.objects.aggregate(total_qty=Sum("quantity"))["total_qty"] or 0
+    )
+
+    total_purchase_value = (
+        Purchase.objects.aggregate(total=Sum("total_price"))["total"] or 0
+    )
+    total_sales_value = (
+        Sale.objects.aggregate(total=Sum("total_price"))["total"] or 0
+    )
+
+    net_profit = total_sales_value - total_purchase_value
+
+    # --- Last 7 days chart data (Purchases vs Sales) ---
+    today = now().date()
+    labels = []
+    purchase_data = []
+    sales_data = []
+
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        labels.append(day.strftime("%d-%b"))  # e.g., 02-Dec
+
+        day_purchases = (
+            Purchase.objects.filter(date=day)
+            .aggregate(total=Sum("total_price"))["total"]
+            or 0
+        )
+        day_sales = (
+            Sale.objects.filter(date=day)
+            .aggregate(total=Sum("total_price"))["total"]
+            or 0
+        )
+
+        purchase_data.append(float(day_purchases))
+        sales_data.append(float(day_sales))
 
     context = {
         "total_products": total_products,
-        "total_purchases": total_purchases,
-        "total_sales": total_sales,
+        "total_stock_quantity": total_stock_quantity,
+        "total_purchase_value": total_purchase_value,
+        "total_sales_value": total_sales_value,
+        "net_profit": net_profit,
+        "labels": labels,
+        "purchase_data": purchase_data,
+        "sales_data": sales_data,
     }
 
     return render(request, "accounts/dashboard.html", context)
-
-def dashboard(request):
-    context = {
-        "product_count": Product.objects.count(),
-        "purchase_count": Purchase.objects.count(),
-        "sale_count": Sale.objects.count(),
-    }
-    return render(request, "dashboard.html", context)
-
-
-

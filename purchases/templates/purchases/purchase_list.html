@@ -1,28 +1,27 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% extends "base.html" %}
+{% block title %}Purchase List{% endblock %}
 
-<div class="container">
-    <h2>Purchases</h2>
+{% block content %}
+<h2>Purchase Records</h2>
 
-    <a href="{% url 'add_purchase' %}" class="btn-primary">+ Add Purchase</a>
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price / Unit</th>
+        <th>Total Price</th>
+        <th>Date</th>
+    </tr>
 
-    <table class="table">
-        <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price/Unit</th>
-            <th>Total</th>
-            <th>Date</th>
-        </tr>
+    {% for p in purchases %}
+    <tr>
+        <td>{{ p.product.name }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>{{ p.price_per_unit }}</td>
+        <td>{{ p.total_price }}</td>
+        <td>{{ p.date }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
-        {% for p in purchases %}
-        <tr>
-            <td>{{ p.product.name }}</td>
-            <td>{{ p.quantity }}</td>
-            <td>{{ p.price_per_unit }}</td>
-            <td>{{ p.total_price }}</td>
-            <td>{{ p.date }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+{% endblock %}
