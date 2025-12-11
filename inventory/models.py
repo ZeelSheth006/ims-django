@@ -1,4 +1,6 @@
 from django.db import models
+from .models import  Category
+
 
 # ==========================
 #        SUPPLIER
@@ -31,9 +33,13 @@ class Customer(models.Model):
 # ==========================
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    category = models.CharField(max_length=255, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     stock = models.IntegerField(default=0)
     price = models.FloatField(default=0.0)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
