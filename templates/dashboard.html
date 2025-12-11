@@ -1,138 +1,73 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="container mt-4">
-
-    <h2>Inventory Dashboard</h2>
-    <hr>
-
-    <!-- Metric Cards -->
-    <div class="row mt-3">
-        <div class="col-md-3">
-            <div class="card text-bg-primary mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Products</h5>
-                    <p class="card-text fs-4">{{ total_products }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-bg-success mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Stock Units</h5>
-                    <p class="card-text fs-4">{{ total_stock_units }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-bg-info mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Sales Amount</h5>
-                    <p class="card-text fs-5">₹ {{ total_sales_amount|floatformat:2 }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-bg-warning mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Purchase Amount</h5>
-                    <p class="card-text fs-5">₹ {{ total_purchase_amount|floatformat:2 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Low Stock -->
-    <div class="mt-4">
-        <h4>Low Stock Items</h4>
-        {% if low_stock_items %}
-            <table class="table table-sm table-bordered mt-2">
-                <thead class="table-danger">
-                    <tr>
-                        <th>Product</th>
-                        <th>Qty</th>
-                        <th>Limit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in low_stock_items %}
-                    <tr>
-                        <td>{{ p.name }}</td>
-                        <td>{{ p.quantity }}</td>
-                        <td>{{ p.low_stock_limit }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p class="text-muted">No low stock items 🎉</p>
-        {% endif %}
-    </div>
-
-    <!-- Recent Sales & Purchases -->
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h4>Recent Sales</h4>
-            <table class="table table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Product</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for s in recent_sales %}
-                    <tr>
-                        <td>{{ s.date }}</td>
-                        <td>{{ s.product.name }}</td>
-                        <td>{{ s.customer }}</td>
-                        <td>₹ {{ s.total_price|floatformat:2 }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4" class="text-center">No sales yet</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-md-6">
-            <h4>Recent Purchases</h4>
-            <table class="table table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Product</th>
-                        <th>Supplier</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in recent_purchases %}
-                    <tr>
-                        <td>{{ p.date }}</td>
-                        <td>{{ p.product.name }}</td>
-                        <td>{{ p.supplier }}</td>
-                        <td>₹ {{ p.total_price|floatformat:2 }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4" class="text-center">No purchases yet</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-</div>
-{% extends "base.html" %}
 
 {% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>Dashboard Overview</h2>
+<div class="container mt-4">
 
-<p>Welcome {{ request.user.username }}! Your IMS is running successfully.</p>
+    <h2 class="mb-4">Dashboard Overview</h2>
+    <p>Welcome {{ request.user.username }}! Your IMS is running successfully.</p>
+
+    <div class="row mt-4">
+        <!-- Total Products -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Products</h5>
+                    <p class="card-text display-6">{{ total_products }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Suppliers -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Suppliers</h5>
+                    <p class="card-text display-6">{{ total_suppliers }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Customers -->
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Customers</h5>
+                    <p class="card-text display-6">{{ total_customers }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock Alert Section -->
+    <div class="card mt-4">
+        <div class="card-header bg-danger text-white">
+            <h5>Low Stock Products (Below 5)</h5>
+        </div>
+        <div class="card-body">
+            {% if low_stock_products %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in low_stock_products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.stock }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-success">All products have sufficient stock.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

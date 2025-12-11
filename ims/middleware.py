@@ -6,11 +6,12 @@ class LoginRequiredMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        allowed_urls = [
-            reverse("login"),
-        ]
+        allowed_urls = ['/accounts/login/', '/accounts/register/', '/admin/']
 
-        if not request.user.is_authenticated and request.path not in allowed_urls:
-            return redirect("login")
+        user = getattr(request, "user", None)
+
+        if request.path not in allowed_urls:
+            if user is None or not user.is_authenticated:
+                return redirect('/accounts/login/')
 
         return self.get_response(request)
