@@ -3,7 +3,8 @@ from .models import Product, PurchaseBatch
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "price", "stock")
+   list_display = ("name", "stock", "price")
+
 
 @admin.register(PurchaseBatch)
 class PurchaseBatchAdmin(admin.ModelAdmin):

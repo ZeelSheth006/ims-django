@@ -1,18 +1,27 @@
 
 from django.shortcuts import render
 from .models import Product
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import ProductForm
 
 
 def home(request):
     return render(request, "inventory/home.html")
 
-
+@login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    total_products = Product.objects.count()
+    low_stock = Product.objects.filter(stock__lte=5).count()
+
+    context = {
+        "total_products": total_products,
+        "low_stock": low_stock,
+    }
+    return render(request, "dashboard.html", context)
+
 
 def product_list(request):
     products = Product.objects.all()
@@ -33,18 +42,11 @@ def add_product(request):
 
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
-
-    if request.method == "POST":
-        product.name = request.POST.get("name")
-        product.price = request.POST.get("price")
-        product.stock = request.POST.get("stock")
-        product.save()
-
-        messages.success(request, "Product updated successfully")
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid():
+        form.save()
         return redirect("product_list")
-
-    return render(request, "inventory/edit_product.html", {"product": product})
-
+    return render(request, "inventory/edit_product.html", {"form": form})
 
 
 def customer_list(request):
@@ -69,28 +71,10 @@ def sales_report(request):
 def stock_report(request):
     return render(request, 'reports/stock_report.html')
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
-from django.contrib import messages
-
-
-def edit_product(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-
-    if request.method == "POST":
-        product.name = request.POST.get("name")
-        product.price = request.POST.get("price")
-        product.stock = request.POST.get("stock")
-        product.save()
-
-        messages.success(request, "Product updated successfully")
-        return redirect("product_list")
-
-    return render(request, "inventory/edit_product.html", {"product": product})
-
 
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    product.delete()
-    messages.success(request, "Product deleted successfully")
-    return redirect("product_list")
+    if request.method == "POST":
+        product.delete()
+        return redirect("product_list")
+    return render(request, "inventory/delete_product.html", {"product": product})

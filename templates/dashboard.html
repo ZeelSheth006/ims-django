@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Inventory Management Dashboard</h2>
+<h2>Dashboard</h2>
 
 <ul>
-    <li><a href="/inventory/products/">Manage Products</a></li>
-    <li><a href="/purchases/">Add Purchases</a></li>
-    <li><a href="/sales/">Record Sales</a></li>
-    <li><a href="/reports/stock/">Stock Report</a></li>
-    <li><a href="/reports/purchases/">Purchase Report</a></li>
+    <li><a href="{% url 'product_list' %}">📦 Products</a></li>
+    <li><a href="{% url 'add_product' %}">➕ Add Product</a></li>
+    <li><a href="/purchases/">🧾 Purchases</a></li>
+    <li><a href="/sales/">💰 Sales</a></li>
+    <li><a href="/reports/stock/">📊 Stock Report</a></li>
+    <li><a href="/reports/purchases/">📑 Purchase Report</a></li>
+    <li><a href="/accounts/logout/">🚪 Logout</a></li>
 </ul>
+
+<hr>
+
+<p>Total Products: {{ total_products }}</p>
+<p>Low Stock Items: {{ low_stock }}</p>
+
 
 {% endblock %}

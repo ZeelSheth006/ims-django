@@ -2,6 +2,12 @@ from django.shortcuts import render
 from purchases.models import Purchase
 from sales.models import Sale
 from inventory.models import Product
+from django.shortcuts import render
+from inventory.models import Product, PurchaseBatch
+from sales.models import Sale
+
+from django.shortcuts import render
+from inventory.models import PurchaseBatch
 
 
 # ---------------------------
@@ -43,22 +49,9 @@ def report_home(request):
     products = Product.objects.all()
     return render(request, "reports/report_home.html", {"products": products})
 
-from django.shortcuts import render
-from inventory.models import Product, PurchaseBatch
-from sales.models import Sale
+
 
 def fifo_report(request):
-    sales = Sale.objects.all().order_by("-created_at")
+    batches = PurchaseBatch.objects.select_related("product").order_by("created_at")
+    return render(request, "reports/fifo_report.html", {"batches": batches})
 
-    report = []
-    for sale in sales:
-        report.append({
-            "product": sale.product.name,
-            "quantity": sale.quantity,
-            "selling_price": sale.selling_price,
-            "cost_price": sale.cost_price,
-            "profit": sale.profit,
-            "date": sale.created_at,
-        })
-
-    return render(request, "reports/fifo_report.html", {"report": report})

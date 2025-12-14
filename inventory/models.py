@@ -48,6 +48,7 @@ class Product(models.Model):
         return self.name
 
 
+
 class PurchaseBatch(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity_left = models.IntegerField()
